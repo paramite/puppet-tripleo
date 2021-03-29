@@ -215,7 +215,7 @@ class tripleo::profile::base::metrics::qdr (
       listener_trusted_certs   => $listener_trusted_certs,
       router_mode              => $router_mode,
       connectors               => $all_connectors,
-      ssl_profiles             => $ssl_profiles,
+      ssl_profiles             => qdr_ssl_certificates($ssl_profiles, '/etc/pki/tls/certs/', '/etc/pki/tls/private/'),
       extra_addresses          => $addresses,
       autolink_addresses       => $autolink_addresses,
       extra_listeners          => $internal_listeners,

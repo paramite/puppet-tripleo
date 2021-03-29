@@ -188,6 +188,28 @@ describe 'tripleo::profile::base::metrics::qdr' do
         expect(connectors.length).to match 1
       end
     end
+
+    context 'with step 3 and ssl_profiles' do
+      before do
+        params.merge!({
+          :ssl_profiles => [
+            {name => "wubba", caCertFile => "ca_wubba", certFile => "cert_wubba", privateKeyFile => "dub"},
+            {name => "lubba", caCertFile => "ca_lubba", certFile => "cert_lubba", privateKeyFile => "dub dub"},
+          ]
+        })
+      end
+
+      it 'should set sslProfiles correctly' do
+        is_expected.to contain_class('qdr').with(:ssl_profiles => [
+          {name => "wubba", caCertFile => '/etc/pki/tls/certs/caCertFile_wubba.pem',
+            certFile => '/etc/pki/tls/certs/certFile_wubba.pem',
+            privateKeyFile => '/etc/pki/tls/private/privateKeyFile_wubba.key'},
+          {name => "lubba", caCertFile => '/etc/pki/tls/certs/caCertFile_lubba.pem',
+            certFile => '/etc/pki/tls/certs/certFile_lubba.pem',
+            privateKeyFile => '/etc/pki/tls/private/privateKeyFile_lubba.key'},
+        ])
+      end
+    end
   end
 
   on_supported_os.each do |os, facts|
